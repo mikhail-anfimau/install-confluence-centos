@@ -9,9 +9,9 @@
 #####################################################################
 # Get the inputs from user                                          #
 #####################################################################
-confluence_user="confluence_user"
-confluence_db="confluence_db"
-server_add="confluence.literatura.by"
+confluence_user="confluence"
+confluence_db="confluence"
+server_add="127.0.0.1"
 http_port="8090"
 control_port="8000"
 confluence_ver="6.2.1"
@@ -93,12 +93,4 @@ echo -e "\033[32mSSL certification is going to be added to confluence java keyst
 /opt/atlassian/confluence/jre/bin/keytool -import -alias $server_add -keystore /opt/atlassian/confluence/jre/lib/security/cacerts -storepass $keystore_pwd -file /etc/pki/tls/certs/$ssl_crt
 
 
-#reboot
-echo -e "\033[32mGreat!!! confluence installation completed successfully."
-echo "Your system needs to be rebooted before you can continue to setup your system from GUI."
-echo "After restart you need to complete the setup from a web browser. Navigate to: https://$server_add"
-echo -e "\033[31m=======Press Any Key to reboot the system!!!!!!!========\033[0m"
-read -n1
-echo
 reboot
-
