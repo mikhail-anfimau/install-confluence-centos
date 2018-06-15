@@ -40,7 +40,7 @@ systemctl start postgresql
 mkdir myconf
 
 #prepare database: create database, user and grant permissions to the user
-printf "CREATE USER $confluence_user WITH PASSWORD '$confluence_usr_pwd';\nCREATE DATABASE $confluence_db WITH ENCODING='UTF8' OWNER=$confluence_user CONNECTION LIMIT=-1;\nGRANT ALL ON ALL TABLES IN SCHEMA public TO $confluence_user;\nGRANT ALL ON SCHEMA public TO $confluence_user;" > myconf/confluence-db.sql
+printf "CREATE USER $confluence_user WITH PASSWORD '$confluence_usr_pwd';\nCREATE DATABASE $confluence_db WITH ENCODING='UTF8' OWNER=$confluence_user CONNECTION LIMIT=-1 lc_collate='en_US.utf8' lc_ctype='en_US.utf8' template template0;\nGRANT ALL ON ALL TABLES IN SCHEMA public TO $confluence_user;\nGRANT ALL ON SCHEMA public TO $confluence_user;" > myconf/confluence-db.sql
 
 sudo -u postgres psql -f myconf/confluence-db.sql
 
@@ -86,4 +86,4 @@ sh download/atlassian-confluence-$confluence_ver-x64.bin -q -varfile ../myconf/r
 #copy updated server.xml file
 cp -v myconf/server.xml /opt/atlassian/confluence/conf/server.xml
 
-reboot
+systemctl restart httpd
