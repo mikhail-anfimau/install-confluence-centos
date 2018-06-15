@@ -66,6 +66,8 @@ sed -i "s|8090|$http_port|g" myconf/confluence.conf  && echo "server port update
 
 sed -i "s|confluence.yoursite.com|$server_add|g" myconf/server.xml  && echo "server address updated on server.xml file successfully" || echo "server address update on server.xml failed"
 
+mkdir -pv /opt/rh/httpd24/root/var/www/confluence/logs/
+
 #setup apache server
 systemctl enable httpd
 systemctl start httpd
