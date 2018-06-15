@@ -87,3 +87,4 @@ sh download/atlassian-confluence-$confluence_ver-x64.bin -q -varfile ../myconf/r
 cp -v myconf/server.xml /opt/atlassian/confluence/conf/server.xml
 
 systemctl restart httpd
+reboot
