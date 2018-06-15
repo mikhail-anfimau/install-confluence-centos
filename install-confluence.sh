@@ -9,34 +9,13 @@
 #####################################################################
 # Get the inputs from user                                          #
 #####################################################################
-read -p "Enter the confluence user name you want to create(confluence_user): " confluence_user
-confluence_user=${confluence_user:-confluence_user}
-read -sp "Enter the new confluence user password: " confluence_usr_pwd
-echo
-read -p "Enter the confluence database you want to create (confluence_db): " confluence_db
-confluence_db=${confluence_db:-confluence_db}
-
-#copy your ssl certificates
-echo -e "For SSL certificates to work properly you need to copy the certificate files into the right location. I assume you have them in below addresses:"
-echo -e "  - certificate file: /etc/pki/tls/certs/your_cert_file.crt"
-echo -e "  - certificate key file: /etc/pki/tls/private/your_private_key_file.key"
-
-read -p "Enter the ssl certification file name (localhost.crt):" ssl_crt
-ssl_crt=${ssl_crt:-"localhost.crt"}
-read -p "Enter the ssl certification private key file name (localhost.key):" ssl_key
-ssl_key=${ssl_key:-"localhost.key"}
-
-read -p "Enter your server address (youraddress.com):" server_add
-server_add=${server_add:-"youraddress.com"}
-
-read -p "Enter your confluence HTTP Port Number (8090):" http_port
-http_port=${http_port:-"8090"}
-
-read -p "Enter your confluence Control Port Number (8000):" control_port
-control_port=${control_port:-"8000"}
-
-read -p "Enter the version of confluence you want to install(6.7.2):" confluence_ver
-confluence_ver=${confluence_ver:-"6.7.2"}
+confluence_user="confluence_user"
+confluence_usr_pwd="-pi~+D7o5j+!pn+.!.-M"
+confluence_db="confluence_db"
+server_add="confluence.literatura.by"
+http_port="8090"
+control_port="8000"
+confluence_ver="6.2.1"
 
 #Java keystore password default value. Default value most certainly hasn't been changed.
 keystore_pwd=changeit
@@ -62,6 +41,8 @@ sed -i "s|host    all             all             127.0.0.1/32.*|host    all    
 
 systemctl start postgresql
 
+mkdir myconf
+
 #prepare database: create database, user and grant permissions to the user
 printf "CREATE USER $confluence_user WITH PASSWORD '$confluence_usr_pwd';\nCREATE DATABASE $confluence_db WITH ENCODING='UTF8' OWNER=$confluence_user CONNECTION LIMIT=-1;\nGRANT ALL ON ALL TABLES IN SCHEMA public TO $confluence_user;\nGRANT ALL ON SCHEMA public TO $confluence_user;" > myconf/confluence-db.sql
 
@@ -84,8 +65,6 @@ cp -v CONF/confluence/response.varfile myconf/
 
 mkdir -pv /opt/rh/httpd24/root/var/www/confluence/logs/
 
-sed -i "s|SSLCertificateFile.*|SSLCertificateFile /etc/pki/tls/certs/$ssl_crt|" myconf/confluence.conf  && echo "cert info added to confluence.conf file successfully" || echo "cert info update on confluence.conf file failed"
-sed -i "s|SSLCertificateKeyFile.*|SSLCertificateKeyFile /etc/pki/tls/private/$ssl_key|" myconf/confluence.conf && echo "ssl key info added to confluence.conf file successfully" || echo "ssl key info update on confluence.conf file failed"
 sed -i "s|confluence.yoursite.com|$server_add|g" myconf/confluence.conf  && echo "server address updated on confluence.conf file successfully" || echo "server address update on confluence.conf failed"
 sed -i "s|8090|$http_port|g" myconf/confluence.conf  && echo "server port updated on confluence.conf file successfully" || echo "server port update on confluence.conf failed"
 
@@ -102,6 +81,7 @@ cp -v myconf/confluence.conf /opt/rh/httpd24/root/etc/httpd/conf.d/
 sed -i "s|8090|$http_port|g" myconf/response.varfile  && echo "http port updated on successfully" || echo "server port update on confluence.conf failed"
 sed -i "s|8000|$control_port|g" myconf/response.varfile  && echo "control port updated on successfully" || echo "server port update on confluence.conf failed"
 
+mkdir download/
 
 wget -P download/  https://product-downloads.atlassian.com/software/confluence/downloads/atlassian-confluence-$confluence_ver-x64.bin
 chmod u+x download/atlassian-confluence-$confluence_ver-x64.bin
