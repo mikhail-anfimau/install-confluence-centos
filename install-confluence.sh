@@ -11,10 +11,8 @@
 #####################################################################
 confluence_user="confluence"
 confluence_db="confluence"
-server_add="127.0.0.1"
 http_port="8090"
 control_port="8000"
-confluence_ver="6.2.1"
 
 #Java keystore password default value. Default value most certainly hasn't been changed.
 keystore_pwd=changeit
@@ -61,7 +59,7 @@ cp -v CONF/confluence/response.varfile myconf/
 
 #update confluence.conf virtual host file
 
-sed -i "s|confluence.yoursite.com|$server_add|g" myconf/confluence.conf  && echo "server address updated on confluence.conf file successfully" || echo "server address update on confluence.conf failed"
+sed -i "s|confluence.yoursite.com|127.0.0.1|g" myconf/confluence.conf  && echo "server address updated on confluence.conf file successfully" || echo "server address update on confluence.conf failed"
 sed -i "s|8090|$http_port|g" myconf/confluence.conf  && echo "server port updated on confluence.conf file successfully" || echo "server port update on confluence.conf failed"
 
 sed -i "s|confluence.yoursite.com|$server_add|g" myconf/server.xml  && echo "server address updated on server.xml file successfully" || echo "server address update on server.xml failed"
@@ -87,10 +85,5 @@ sh download/atlassian-confluence-$confluence_ver-x64.bin -q -varfile ../myconf/r
 
 #copy updated server.xml file
 cp -v myconf/server.xml /opt/atlassian/confluence/conf/server.xml
-
-#add ssl certificate to java key store
-echo -e "\033[32mSSL certification is going to be added to confluence java keystore\033[0m"
-/opt/atlassian/confluence/jre/bin/keytool -import -alias $server_add -keystore /opt/atlassian/confluence/jre/lib/security/cacerts -storepass $keystore_pwd -file /etc/pki/tls/certs/$ssl_crt
-
 
 reboot

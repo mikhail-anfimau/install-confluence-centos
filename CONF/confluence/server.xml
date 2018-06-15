@@ -16,8 +16,8 @@
                 protocol="org.apache.coyote.http11.Http11NioProtocol"
 
                 proxyName="confluence.yoursite.com"
-                proxyPort="443"
-                scheme="https"
+                proxyPort="80"
+                scheme="http"
 
         />
 
