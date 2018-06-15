@@ -28,8 +28,7 @@ yum install -y  vim wget centos-release-scl
 
 #install required packages
 echo -e "\033[32mInstall packages you need for confluence\033[0m"
-yum install -y  postgresql-server\
-                httpd24-httpd httpd24-mod_ssl httpd24-mod_proxy_html
+yum install -y  postgresql-server httpd
 
 #setup database server
 postgresql-setup initdb
@@ -63,8 +62,6 @@ cp -v CONF/confluence/response.varfile myconf/
 
 #update confluence.conf virtual host file
 
-mkdir -pv /opt/rh/httpd24/root/var/www/confluence/logs/
-
 sed -i "s|confluence.yoursite.com|$server_add|g" myconf/confluence.conf  && echo "server address updated on confluence.conf file successfully" || echo "server address update on confluence.conf failed"
 sed -i "s|8090|$http_port|g" myconf/confluence.conf  && echo "server port updated on confluence.conf file successfully" || echo "server port update on confluence.conf failed"
 
@@ -73,7 +70,7 @@ sed -i "s|confluence.yoursite.com|$server_add|g" myconf/server.xml  && echo "ser
 #setup apache server
 systemctl enable httpd24-httpd
 systemctl start httpd24-httpd 
-cp -v myconf/confluence.conf /opt/rh/httpd24/root/etc/httpd/conf.d/
+cp -v myconf/confluence.conf /etc/httpd/conf.d/
 
 
 
