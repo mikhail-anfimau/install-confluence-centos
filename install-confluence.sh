@@ -10,7 +10,6 @@
 # Get the inputs from user                                          #
 #####################################################################
 confluence_user="confluence_user"
-confluence_usr_pwd="-pi~+D7o5j+!pn+.!.-M"
 confluence_db="confluence_db"
 server_add="confluence.literatura.by"
 http_port="8090"
@@ -68,8 +67,8 @@ sed -i "s|8090|$http_port|g" myconf/confluence.conf  && echo "server port update
 sed -i "s|confluence.yoursite.com|$server_add|g" myconf/server.xml  && echo "server address updated on server.xml file successfully" || echo "server address update on server.xml failed"
 
 #setup apache server
-systemctl enable httpd24-httpd
-systemctl start httpd24-httpd 
+systemctl enable httpd
+systemctl start httpd
 cp -v myconf/confluence.conf /etc/httpd/conf.d/
 
 
